@@ -1,6 +1,4 @@
 const express = require('express');
-const http = require('http');
-const { Server } = require('socket.io');
 const cors = require('cors');
 require('dotenv').config();
 
@@ -18,15 +16,6 @@ const achievementRoutes = require('./routes/achievements');
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
-const server = http.createServer(app);
-
-// Configuration Socket.IO
-const io = new Server(server, {
-  cors: {
-    origin: "*", // Accepte toutes les origines (pour le dev)
-    methods: ["GET", "POST"]
-  }
-});
 
 // Middlewares
 app.use(cors());
@@ -50,38 +39,10 @@ app.get('/', (req, res) => {
 // Middleware global pour gérer les erreurs
 app.use(errorHandler);
 
-// WEBSOCKETS 
-
-io.on('connection', (socket) => {
-  console.log(' Utilisateur connecté:', socket.id);
-
-  // Rejoindre une salle de chat
-  socket.on('join_room', (room_id) => {
-    socket.join(room_id);
-    console.log(`Utilisateur ${socket.id} a rejoint la salle ${room_id}`);
-  });
-
-  // Recevoir et diffuser un message
-  socket.on('send_message', (data) => {
-    console.log('Message reçu:', data);
-    // Envoyer le message à tous dans la salle
-    io.to(data.room_id).emit('receive_message', {
-      sender_id: data.sender_id,
-      message_text: data.message_text,
-      created_at: new Date()
-    });
-  });
-
-  // Déconnexion
-  socket.on('disconnect', () => {
-    console.log(' Utilisateur déconnecté:', socket.id);
-  });
-});
-
-
 // Démarrage du serveur (IMPORTANT : server.listen, pas app.listen)
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => {
+
+app.listen(PORT,()=>{
   console.log(` Serveur lancé sur http://localhost:${PORT}`);
   console.log(` WebSockets activés`);
-});
+})
