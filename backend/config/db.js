@@ -2,7 +2,7 @@
 const { Pool } = require('pg');
 
 const pool = new Pool({
-  host: '192.168.100.1',
+  host: '192.168.0.222',
   port: 5432,
   database: 'web-komodo',
   user: 'postgres',
