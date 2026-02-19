@@ -12,6 +12,12 @@ Register
 Login
 { method: POST, path: /api/auth/login, auth?: public, roles: public, params: { email, password }, return format: { token, userId, role }, possible statuses: 200, 401, 404, 500 }
 
+Google OAuth - Redirect
+{ method: GET, path: /api/auth/google, auth?: public, roles: public, params: –, return format: redirection vers Google, possible statuses: 302 }
+
+Google OAuth - Callback
+{ method: GET, path: /api/auth/google/callback, auth?: public, roles: public, params: code (géré par Google), return format: redirection vers frontend avec token JWT, possible statuses: 302, 401, 500 }
+
 # Players
 
 Get all players
