@@ -1,4 +1,4 @@
-require('dotenv').config(); // 👈 ajoute cette ligne tout en haut
+require('dotenv').config(); 
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const pool = require('./db');
